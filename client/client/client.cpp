@@ -5,7 +5,7 @@
 #include "helper_functions_client.h"
 
 #define DEFAULT_BUFLEN 512
-#define DEFAULT_PORT "27015"
+#define DEFAULT_PORT "27000"
 
 int __cdecl main(int argc, char** argv)
 {
@@ -86,6 +86,7 @@ int __cdecl main(int argc, char** argv)
         printf("Server busy!!!\n");
         return 1;
     }
+
     // Send an initial buffer
     while (1) {
 

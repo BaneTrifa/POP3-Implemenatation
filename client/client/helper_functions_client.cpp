@@ -2,7 +2,7 @@
 
 
 void login_menu(char* uinput){
-    std::cout << "Enter your Username: \t";
+    std::cout << "Enter your gmail: \t";
     std::cin >> uinput;
 }
 
