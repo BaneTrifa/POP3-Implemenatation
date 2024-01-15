@@ -113,8 +113,12 @@
     <ClInclude Include="..\Kernel\UdpLogInterface.h" />
     <ClInclude Include="..\Kernel\uniSock.h" />
     <ClInclude Include="const.h" />
+    <ClInclude Include="conversion.h" />
+    <ClInclude Include="MailboxDatabase.h" />
+    <ClInclude Include="UserDatabase.h" />
     <ClInclude Include="helperFunctionsServer.h" />
     <ClInclude Include="ServerAuto.h" />
+    <ClInclude Include="sqlite3.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Kernel\buffers.cpp" />
@@ -144,9 +148,13 @@
     <ClCompile Include="..\Kernel\TransportInterface.cpp" />
     <ClCompile Include="..\Kernel\UdpFSM.cpp" />
     <ClCompile Include="..\Kernel\UdpLogInterface.cpp" />
+    <ClCompile Include="conversion.cpp" />
+    <ClCompile Include="MailboxDatabase.cpp" />
+    <ClCompile Include="UserDatabase.cpp" />
     <ClCompile Include="helperFunctionsServer.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="ServerAuto.cpp" />
+    <ClCompile Include="sqlite3.c" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

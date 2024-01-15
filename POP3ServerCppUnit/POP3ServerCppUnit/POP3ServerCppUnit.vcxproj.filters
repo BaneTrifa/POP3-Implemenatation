@@ -113,7 +113,19 @@
     <ClInclude Include="ServerAuto.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="helperFunctionsServer.h">
+    <ClInclude Include="HelperFunctionsServer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sqlite3.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="conversion.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UserDatabase.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MailboxDatabase.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -205,7 +217,19 @@
     <ClCompile Include="ServerAuto.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="helperFunctionsServer.cpp">
+    <ClCompile Include="HelperFunctionsServer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sqlite3.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="conversion.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UserDatabase.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MailboxDatabase.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

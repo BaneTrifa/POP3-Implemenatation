@@ -12,8 +12,8 @@ int __cdecl main(int argc, char** argv)
     WSADATA wsaData;
     SOCKET ConnectSocket = INVALID_SOCKET;
     struct addrinfo* result = NULL,
-        * ptr = NULL,
-        hints;
+                    * ptr = NULL,
+                    hints;
 
     const char* sendbuf = "this is a test from client";
     char recvbuf[DEFAULT_BUFLEN];
@@ -115,7 +115,13 @@ int __cdecl main(int argc, char** argv)
 
         while (1) {
             // Enter option and send to server
-           
+            int option = user_menu(uinput);
+            send_data(uinput, ConnectSocket);
+
+            if (!receive_data(ConnectSocket, message)) return 1;
+
+            // print feedback to client
+            feedback(option, message);
         }
     }
 

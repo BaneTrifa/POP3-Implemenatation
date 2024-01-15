@@ -3,6 +3,7 @@
 
 #include "NetFSM.h"
 #include "const.h"
+#include <queue>
 
 /**
  * Function responsible for recieving messages from the client.

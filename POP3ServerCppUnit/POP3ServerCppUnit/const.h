@@ -72,5 +72,8 @@ const uint16 MSG_QUIT					= 0x0018;
 #define PARAM_Pass 0x03
 
 #define DEFAULT_BUFLEN 255
+#define SOCKET_READ_TIMEOUT_SEC 30
+#define DB_NAME "pop3.db"
+
 
 #endif //_CONST_H_

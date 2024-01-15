@@ -4,7 +4,8 @@
 
 #include "const.h"
 #include "ServerAuto.h"
-#include "helperFunctionsServer.h"
+#include "HelperFunctionsServer.h"
+#include "UserDatabase.h"
 
 bool g_ProgramEnd = false;
 
@@ -81,6 +82,8 @@ void ServerAuto::FSM_Server_Idle_Connection_Request() {
 
 bool ServerAuto::FSM_Server_Authorising_UsernamPassword(SOCKET clientSocket){
 
+    UserDatabase db;
+	std::string db_name = DB_NAME;
 	char* gmail = new char[50];
 	char* password = new char[50];
 
@@ -89,7 +92,8 @@ bool ServerAuto::FSM_Server_Authorising_UsernamPassword(SOCKET clientSocket){
 		if(receive_data_server(clientSocket, gmail) == false) 
 			return 1;
 
-		if (strcmp(gmail, "columbo") == 0 && send_data_server(clientSocket, "ACCEPT")) { // check if email is valid and if it is, try to sent ACCEPT 
+		if (db.find_user(gmail, db_name.c_str()) && !db.get_logged_in() &&
+			!db.get_banned() && send_data_server(clientSocket, "ACCEPT")) { // check if email is valid and if it is, try to sent ACCEPT 
             break;
 		}
 		else if (send_data_server(clientSocket, "DECLINE") == false){ // email is not valid and try to send DECLINE
@@ -97,14 +101,17 @@ bool ServerAuto::FSM_Server_Authorising_UsernamPassword(SOCKET clientSocket){
          }
 	}
 
-	printf("Gmail: %s\n", gmail);
+	db.set_logged_in(true);
+	return 1;
+	//printf("Gmail: %s\n", gmail);
 
 	while (true) {
 		// Receive password
 		if(receive_data_server(clientSocket, password) == false) 
 			return 1;
 
-		if (strcmp(password, "1234") == 0 && send_data_server(clientSocket, "ACCEPT")) { // check if passwrod is valid and if it is, try to sent ACCEPT
+		std::string password_from_db = db.get_password();
+		if (password == password_from_db && send_data_server(clientSocket, "ACCEPT")) { // check if passwrod is valid and if it is, try to sent ACCEPT
             break;
 		}
 		else if (send_data_server(clientSocket, "DECLINE") == false){	// email is not valid and try to send DECLINE
@@ -112,18 +119,29 @@ bool ServerAuto::FSM_Server_Authorising_UsernamPassword(SOCKET clientSocket){
         }
 	}
 
-	printf("Password: %s\n", password);
+	//printf("Password: %s\n", password);
 
-	this->FSM_Server_Transaction_Processing();
+	this->FSM_Server_Transaction_Processing(clientSocket);
 
 	return 0;
 
 }
 
-void ServerAuto::FSM_Server_Transaction_Processing(){
-	int num;
-	printf("Transaction!!!");
-	scanf("%d\n", &num);
+void ServerAuto::FSM_Server_Transaction_Processing(SOCKET clientSocket) {
+
+	char* option = new char[50];
+	std::queue<int> delete_queue;
+
+	while (true) {
+		// Receive option
+		if(receive_data_server(clientSocket, option) == false) 
+			return;
+
+
+
+		//printf("Option: %s\n", option);
+
+	}
 }
 
 void ServerAuto::FSM_Server_Disconnecting_Processing(){
@@ -131,7 +149,6 @@ void ServerAuto::FSM_Server_Disconnecting_Processing(){
 }
 
 
-// Automat sam sebi salje poruku za start sistema.
 void ServerAuto::Start(){
 
 	PrepareNewMessage(0x00, MSG_TCP_Listening);
