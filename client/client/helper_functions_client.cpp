@@ -27,18 +27,31 @@ int user_menu(char* uinput) {
         std::cin >> option;
     } while (option > 7 || option < 1);
 
+    std::string message_arg;
     switch (option) {
         case 1:
             strcpy(uinput, "STAT");
             break;
         case 2:
-            strcpy(uinput, "LIST");
+            std::cout << "Command: LIST ";
+            std::cin >> message_arg;
+
+            strcpy(uinput, "LIST ");
+            strcat(uinput, message_arg.c_str());
             break;
         case 3:
-            strcpy(uinput, "RETR");
+            std::cout << "Command: RETR ";
+            std::cin >> message_arg;
+
+            strcpy(uinput, "RETR ");
+            strcat(uinput, message_arg.c_str());
             break;
         case 4:
-            strcpy(uinput, "DELE");
+            std::cout << "Command: DELE ";
+            std::cin >> message_arg;
+
+            strcpy(uinput, "DELE ");
+            strcat(uinput, message_arg.c_str());;
             break;
         case 5:
             strcpy(uinput, "NOOP");

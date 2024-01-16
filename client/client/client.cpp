@@ -120,8 +120,10 @@ int __cdecl main(int argc, char** argv)
 
             if (!receive_data(ConnectSocket, message)) return 1;
 
+            printf("%s\n", message);
+
             // print feedback to client
-            feedback(option, message);
+            //feedback(option, message);
         }
     }
 

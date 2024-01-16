@@ -42,6 +42,16 @@ public:
      * @return If the user exist return true else return false
     */
     bool find_mail(char* login_data, const char* data_base);
+
+	
+	/**
+     * This function handles POP3 STAT request from client.
+     * @param data_base Database name.
+	 * @param receiver Client's email.
+	 * @param message_count Number of messages in client's inbox.
+     * @return Length of all messages in receiver's inbox.
+    */
+	int process_stat_request(const char* data_base, const char* receiver, int* message_count);
 };
 
 #endif

@@ -1,0 +1,14 @@
+﻿  client.cpp
+C:\Users\tbran\Desktop\mrkirm_last\POP3-Implemenatation\client\client\client.cpp(8,1): warning C4005: 'DEFAULT_PORT': macro redefinition
+  C:\Users\tbran\Desktop\mrkirm_last\POP3-Implemenatation\client\client\helper_functions_client.h(17,1):
+  see previous definition of 'DEFAULT_PORT'
+  
+C:\Users\tbran\Desktop\mrkirm_last\POP3-Implemenatation\client\client\client.cpp(82,23): warning C4244: 'argument': conversion from 'SOCKET' to 'int', possible loss of data
+C:\Users\tbran\Desktop\mrkirm_last\POP3-Implemenatation\client\client\client.cpp(96,31): warning C4244: 'argument': conversion from 'SOCKET' to 'int', possible loss of data
+C:\Users\tbran\Desktop\mrkirm_last\POP3-Implemenatation\client\client\client.cpp(99,31): warning C4244: 'argument': conversion from 'SOCKET' to 'int', possible loss of data
+C:\Users\tbran\Desktop\mrkirm_last\POP3-Implemenatation\client\client\client.cpp(107,31): warning C4244: 'argument': conversion from 'SOCKET' to 'int', possible loss of data
+C:\Users\tbran\Desktop\mrkirm_last\POP3-Implemenatation\client\client\client.cpp(110,31): warning C4244: 'argument': conversion from 'SOCKET' to 'int', possible loss of data
+C:\Users\tbran\Desktop\mrkirm_last\POP3-Implemenatation\client\client\client.cpp(119,31): warning C4244: 'argument': conversion from 'SOCKET' to 'int', possible loss of data
+C:\Users\tbran\Desktop\mrkirm_last\POP3-Implemenatation\client\client\client.cpp(121,31): warning C4244: 'argument': conversion from 'SOCKET' to 'int', possible loss of data
+C:\Users\tbran\Desktop\mrkirm_last\POP3-Implemenatation\client\client\client.cpp(19,10): warning C4101: 'recvbuf': unreferenced local variable
+  client.vcxproj -> C:\Users\tbran\Desktop\mrkirm_last\POP3-Implemenatation\client\x64\Debug\client.exe

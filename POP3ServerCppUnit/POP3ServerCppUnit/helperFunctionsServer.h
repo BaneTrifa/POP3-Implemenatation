@@ -3,7 +3,10 @@
 
 #include "NetFSM.h"
 #include "const.h"
+#include "MailboxDatabase.h"
+#include "conversion.h"
 #include <queue>
+#include <sstream>
 
 /**
  * Function responsible for recieving messages from the client.
@@ -20,5 +23,14 @@ bool receive_data_server(SOCKET sock, char message[]);
  * @return Return true if message is sent properly else return false
 */
 bool send_data_server(SOCKET sock, const char* message);
+
+/**
+ * Function responsible handling requests from client.
+ * @param sock Number of client's socket on which it is connected to the server.
+ * @param gmail Gmail of the client.
+ * @param request POP3 request from client.
+ * @return Return true if message is handled and sent properly else return false
+*/
+bool process_request(SOCKET sock, char* gmail, char* request);
 
 #endif

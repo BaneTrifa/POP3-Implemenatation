@@ -3,11 +3,12 @@
 
 #include <string>
 #include <string.h>
+#include <sstream>
 
 std::string char_to_string(const char* input);
 
 int char_to_int(char* input);
 
-const char* double_to_char(double input);
+std::string int_to_string(int input);
 
 #endif

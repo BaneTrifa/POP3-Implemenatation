@@ -101,8 +101,6 @@ bool ServerAuto::FSM_Server_Authorising_UsernamPassword(SOCKET clientSocket){
          }
 	}
 
-	db.set_logged_in(true);
-	return 1;
 	//printf("Gmail: %s\n", gmail);
 
 	while (true) {
@@ -121,25 +119,27 @@ bool ServerAuto::FSM_Server_Authorising_UsernamPassword(SOCKET clientSocket){
 
 	//printf("Password: %s\n", password);
 
-	this->FSM_Server_Transaction_Processing(clientSocket);
+	this->FSM_Server_Transaction_Processing(clientSocket, gmail);
 
 	return 0;
 
 }
 
-void ServerAuto::FSM_Server_Transaction_Processing(SOCKET clientSocket) {
+void ServerAuto::FSM_Server_Transaction_Processing(SOCKET clientSocket, char* gmail) {
 
-	char* option = new char[50];
+	char* request = new char[50];
 	std::queue<int> delete_queue;
 
 	while (true) {
 		// Receive option
-		if(receive_data_server(clientSocket, option) == false) 
+		if(receive_data_server(clientSocket, request) == false) 
 			return;
 
+		printf("Option: %s\n", request);
 
-
-		//printf("Option: %s\n", option);
+		if(process_request(clientSocket, gmail, request) == false) {
+			return;
+		}
 
 	}
 }
