@@ -5,7 +5,7 @@
 #include "helper_functions_client.h"
 
 #define DEFAULT_BUFLEN 512
-#define DEFAULT_PORT "27000"
+#define DEFAULT_PORT "110"
 
 int __cdecl main(int argc, char** argv)
 {
@@ -15,13 +15,13 @@ int __cdecl main(int argc, char** argv)
                     * ptr = NULL,
                     hints;
 
-    const char* sendbuf = "this is a test from client";
-    char recvbuf[DEFAULT_BUFLEN];
     int iResult;
-    int recvbuflen = DEFAULT_BUFLEN;
 
-    char uinput[DEFAULT_BUFLEN];    // user input option
-    char message[DEFAULT_BUFLEN];   // recieved message from server
+    char uinput[DEFAULT_BUFLEN];            // user input option
+    char recv_gmail_ACK[DEFAULT_BUFLEN];  // recieved ACCEPT message for gmail from server
+    char recv_pass_ACK[DEFAULT_BUFLEN];  // recieved ACCEPT message for password from server
+    char response[DEFAULT_BUFLEN];         // recieved rsponse on user command from server
+    char message[DEFAULT_BUFLEN];  
 
     // Validate the parameters
     if (argc != 2) {
@@ -87,7 +87,6 @@ int __cdecl main(int argc, char** argv)
         return 1;
     }
 
-    // Send an initial buffer
     while (1) {
 
         // Enter and send username or id
@@ -96,9 +95,9 @@ int __cdecl main(int argc, char** argv)
             send_data(uinput, ConnectSocket);
 
             //Receive identification confirmation
-            if (!receive_data(ConnectSocket, message)) return 1;
+            if (!receive_data(ConnectSocket, recv_gmail_ACK)) return 1;
 
-        } while (strcmp(message, "ACCEPT") != 0);
+        } while (strcmp(recv_gmail_ACK, "ACCEPT") != 0);
 
 
         // Enter and send pin
@@ -107,9 +106,9 @@ int __cdecl main(int argc, char** argv)
             send_data(uinput, ConnectSocket);
 
             //Receive pin confirmation
-            if (!receive_data(ConnectSocket, message)) return 1;
+            if (!receive_data(ConnectSocket, recv_pass_ACK)) return 1;
 
-        } while (strcmp(message, "ACCEPT") != 0);
+        } while (strcmp(recv_pass_ACK, "ACCEPT") != 0);
 
         system("cls");
 
@@ -118,13 +117,21 @@ int __cdecl main(int argc, char** argv)
             int option = user_menu(uinput);
             send_data(uinput, ConnectSocket);
 
-            if (!receive_data(ConnectSocket, message)) return 1;
 
-            printf("%s\n", message);
+            if (!receive_data(ConnectSocket, response)) return 1;
 
-            // print feedback to client
-            //feedback(option, message);
+            printf("%s\n", response);
+
+            system("pause");
+            system("cls");
+
+            if (option == 7) {
+                break;
+            }
+
         }
+
+        system("cls");
     }
 
     // shutdown the connection since no more data will be sent

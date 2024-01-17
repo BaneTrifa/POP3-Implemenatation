@@ -43,7 +43,7 @@ public:
 	// FSM_Server_Authorising
 	bool FSM_Server_Authorising_UsernamPassword(SOCKET clientSocket);
 	// FSM_Server_Transation
-	void FSM_Server_Transaction_Processing(SOCKET clientSocket, char* gmail);
+	bool FSM_Server_Transaction_Processing(SOCKET clientSocket, char* gmail);
 	// FSM_Server_Disconnecting
 	void FSM_Server_Disconnecting_Processing();
 

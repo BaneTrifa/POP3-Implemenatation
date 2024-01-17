@@ -47,7 +47,7 @@ int MailDatabase::process_stat_request(const char* data_base, const char* receiv
 	if(!open_database(data_base))
         return false;
 
-	std::string sql = "SELECT LENGTH(content) AS content_length FROM MAILBOX WHERE receiver='" + char_to_string(receiver) + "';";
+	std::string sql = "SELECT LENGTH(content) AS content_length FROM MAILBOX WHERE receiver='" + char_to_string(receiver) + "' AND deleted=0;";
 
 	sqlite3_stmt* stmt;
     int exit = sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, nullptr);
@@ -71,4 +71,100 @@ int MailDatabase::process_stat_request(const char* data_base, const char* receiv
 
 	return total_length;
 
+}
+
+bool MailDatabase::find_mail(char* gmail, int ordinal_no, const char* data_base) {
+	bool rv = false;
+
+	if(!open_database(data_base))
+        return false;
+
+	std::string sql = "SELECT * FROM MAILBOX WHERE receiver='" + char_to_string(gmail) + "' AND ordinal_no=" + int_to_string(ordinal_no) +" AND deleted=0;";
+
+	struct row element = {-1, "", "", "", "", -1};
+    int exit = sqlite3_exec(db, sql.c_str(), callback, &element, NULL);
+
+	if (exit == SQLITE_OK && element.receiver != "") {
+        rv = true;
+
+        __id = element.id;
+        __receiver = element.receiver;
+        __sender = element.sender;
+		__subject = element.subject;
+        __content = element.content;
+		__ordinal_no = element.ordinal_no;
+
+    }
+
+    sqlite3_close(db);
+    return rv;
+}
+
+bool MailDatabase::mark_message_as_deleted(const char* data_base, const char* gmail, int ordinal_no) {
+	bool rv = false;
+
+	if(!open_database(data_base))
+        return false;
+
+	std::string sql = "UPDATE MAILBOX SET deleted=1 WHERE receiver='" + char_to_string(gmail) + "' AND ordinal_no=" + int_to_string(ordinal_no) +" ;";
+
+	int exit = sqlite3_exec(db, sql.c_str(), NULL, NULL, NULL);
+
+	if (exit == SQLITE_OK) {
+        rv = true;
+	}
+
+	return rv;
+}
+
+bool MailDatabase::unmark_message_deleted(const char* data_base, const char* gmail) {
+	bool rv = false;
+
+	if(!open_database(data_base))
+        return false;
+
+	std::string sql = "UPDATE MAILBOX SET deleted=0 WHERE receiver='" + char_to_string(gmail) + "' ;";
+
+	int exit = sqlite3_exec(db, sql.c_str(), NULL, NULL, NULL);
+
+	if (exit == SQLITE_OK) {
+        rv = true;
+	}
+
+	return rv;
+}
+
+void MailDatabase::delete_marked_message(const char* data_base, const char* gmail) {
+
+	if(!open_database(data_base))
+        return;
+
+	// delete mails marked as deleted
+	std::string sql = "DELETE FROM MAILBOX WHERE deleted=1 AND receiver='" + char_to_string(gmail) + "' ;";
+
+	sqlite3_exec(db, sql.c_str(), NULL, NULL, NULL);
+
+	// Reassagin ordinal_no values to rest non deleted mails
+	sql = "UPDATE MAILBOX SET ordinal_no = (SELECT COUNT(*) FROM MAILBOX t WHERE t.ordinal_no < MAILBOX.ordinal_no AND t.receiver='" + char_to_string(gmail) + "') + 1";
+	sqlite3_exec(db, sql.c_str(), NULL, NULL, NULL);
+
+}
+
+int MailDatabase::get_id() {
+	return __id;
+}
+string MailDatabase::get_sender() {
+	return __sender;
+}
+string MailDatabase::get_receiver() {
+	return __receiver;
+}
+string MailDatabase::get_subject() {
+	return __subject;
+}
+string MailDatabase::get_content() {
+	return __content;
+}
+int MailDatabase::get_ordinal_no() {
+	return __ordinal_no;
 }

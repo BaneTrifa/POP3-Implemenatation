@@ -64,11 +64,11 @@ void ServerAuto::Initialize() {
 	//intitialization message handlers
 	InitEventProc(FSM_Server_Idle, MSG_TCP_Listening, (PROC_FUN_PTR)&ServerAuto::FSM_Server_Idle_Connection_Request);
 	
-	InitEventProc(FSM_Server_Authorising, MSG_User_Name_Password, (PROC_FUN_PTR)&ServerAuto::FSM_Server_Authorising_UsernamPassword);
+	/*InitEventProc(FSM_Server_Authorising, MSG_User_Name_Password, (PROC_FUN_PTR)&ServerAuto::FSM_Server_Authorising_UsernamPassword);
 	InitEventProc(FSM_Server_Authorising, MSG_QUIT, (PROC_FUN_PTR)&ServerAuto::FSM_Server_Disconnecting_Processing);
 
 	InitEventProc(FSM_Server_Transaction, MSG_COMMAND, (PROC_FUN_PTR)&ServerAuto::FSM_Server_Transaction_Processing);
-	InitEventProc(FSM_Server_Transaction, MSG_QUIT, (PROC_FUN_PTR)&ServerAuto::FSM_Server_Disconnecting_Processing);
+	InitEventProc(FSM_Server_Transaction, MSG_QUIT, (PROC_FUN_PTR)&ServerAuto::FSM_Server_Disconnecting_Processing);*/
 }
 
 void ServerAuto::FSM_Server_Idle_Connection_Request() {
@@ -80,7 +80,7 @@ void ServerAuto::FSM_Server_Idle_Connection_Request() {
 	}
 }
 
-bool ServerAuto::FSM_Server_Authorising_UsernamPassword(SOCKET clientSocket){
+bool ServerAuto::FSM_Server_Authorising_UsernamPassword(SOCKET clientSocket) {
 
     UserDatabase db;
 	std::string db_name = DB_NAME;
@@ -101,8 +101,6 @@ bool ServerAuto::FSM_Server_Authorising_UsernamPassword(SOCKET clientSocket){
          }
 	}
 
-	//printf("Gmail: %s\n", gmail);
-
 	while (true) {
 		// Receive password
 		if(receive_data_server(clientSocket, password) == false) 
@@ -117,37 +115,33 @@ bool ServerAuto::FSM_Server_Authorising_UsernamPassword(SOCKET clientSocket){
         }
 	}
 
-	//printf("Password: %s\n", password);
-
-	this->FSM_Server_Transaction_Processing(clientSocket, gmail);
-
-	return 0;
+	return this->FSM_Server_Transaction_Processing(clientSocket, gmail);
 
 }
 
-void ServerAuto::FSM_Server_Transaction_Processing(SOCKET clientSocket, char* gmail) {
+bool ServerAuto::FSM_Server_Transaction_Processing(SOCKET clientSocket, char* gmail) {
 
 	char* request = new char[50];
-	std::queue<int> delete_queue;
 
 	while (true) {
 		// Receive option
-		if(receive_data_server(clientSocket, request) == false) 
-			return;
-
-		printf("Option: %s\n", request);
+		if(receive_data_server(clientSocket, request) == false) {
+			delete[] request;
+			return 1;
+		}
 
 		if(process_request(clientSocket, gmail, request) == false) {
-			return;
+			delete[] request;
+			return 1;
+		} 
+
+		if (strcmp(request, "QUIT") == 0 ) {
+			delete[] request;
+			return 0;
 		}
 
 	}
 }
-
-void ServerAuto::FSM_Server_Disconnecting_Processing(){
-
-}
-
 
 void ServerAuto::Start(){
 
@@ -179,7 +173,7 @@ DWORD ServerAuto::ServerCommunication(LPVOID param) {
 
 	while (1) {
 
-		if(server->FSM_Server_Authorising_UsernamPassword(clientSocket)) return 1;
+		if(server->FSM_Server_Authorising_UsernamPassword(clientSocket)) return 0;
 		
 	}
 

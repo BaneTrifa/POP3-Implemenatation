@@ -37,11 +37,12 @@ public:
 
     /**
      * Find user by gmail
-     * @param login_data User's gmail.
-     * @param data_base Database name
-     * @return If the user exist return true else return false
+     * @param gmail User's gmail.
+     * @param ordinal_no Mail's ordinal number
+	 * @param data_base Database name.
+     * @return If the mail exist return true else return false
     */
-    bool find_mail(char* login_data, const char* data_base);
+    bool find_mail(char* gmail, int ordinal_no, const char* data_base);
 
 	
 	/**
@@ -52,6 +53,31 @@ public:
      * @return Length of all messages in receiver's inbox.
     */
 	int process_stat_request(const char* data_base, const char* receiver, int* message_count);
+
+
+	/**
+     * This function handles POP3 DELETE request from client.
+     * @param data_base Database name.
+	 * @param gmail Client's email.
+	 * @param ordinal_no Ordinal number of the message that client want to delete.
+     * @return If message successfuly marked as deleted return true, else false.
+    */
+	bool mark_message_as_deleted(const char* data_base, const char* gmail, int ordinal_no);
+
+	/**
+     * This function handles POP3 RSET request from client, unmark all deleted messages.
+     * @param data_base Database name.
+	 * @param gmail Client's email.
+     * @return If messages successfuly unmarked return true, else false.
+    */
+	bool unmark_message_deleted(const char* data_base, const char* gmail);
+
+	/**
+     * This function handles POP3 QUIT request from client, delete all marked messages.
+     * @param data_base Database name.
+	 * @param gmail Client's email.
+    */
+	void delete_marked_message(const char* data_base, const char* gmail);
 };
 
 #endif

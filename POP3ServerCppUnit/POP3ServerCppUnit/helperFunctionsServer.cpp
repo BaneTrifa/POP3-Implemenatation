@@ -46,7 +46,7 @@ bool process_request(SOCKET sock, char* gmail, char* request) {
 	iss >> command; // Extract command from request
 	iss >> arg;		// Extract arg from request, if exist
 	
-	if(command == "STAT") {
+	if(command == "STAT") {		// STAT command
 		int messages_count = 0;
 		int total_length = 0;
 		string str_messages_count;
@@ -67,6 +67,99 @@ bool process_request(SOCKET sock, char* gmail, char* request) {
 		} else {
 			return true;
 		}
+	}
+	else if (command == "LIST") {	// LIST command
+		
+		string messages_count;
+		string len_msg;
+		string message;
+
+
+		if (mDB.find_mail(gmail, arg, db_name.c_str())) {
+			message = "+OK ";
+			message += int_to_string(arg);
+			message += " ";
+			message += int_to_string(mDB.get_content().length());
+
+			if (send_data_server(sock, message.c_str()) ) return  true;
+				
+			return false;
+				
+		} else {
+			message = "-ERR no such message\n";
+			if (send_data_server(sock, message.c_str())) return  true;
+				
+			return false;
+		}
+
+	} 
+	else if(command == "RETR") {	// RETR
+	
+		string messages_count;
+		string len_msg;
+		string message;
+
+		if (mDB.find_mail(gmail, arg, db_name.c_str())) {
+			
+			// construct message that contains length of the message
+			message = "+OK "; message += " "; message += int_to_string(mDB.get_content().length()); message += " octets\n";
+
+			// append message with other informations
+			message += "Subject: "; message += mDB.get_subject(); message += "\nReceiver: "; message += mDB.get_receiver();
+			message += "\n"; message += mDB.get_content();
+
+		} else {
+			message = "-ERR no such message\n";
+		}
+
+		// sending response
+		if (!send_data_server(sock, message.c_str()) ) return false; 						
+		return true;
+
+	} else if (command == "DELE") {	// DELETE COMMAND
+
+		string message;
+
+		if (mDB.mark_message_as_deleted(db_name.c_str(), gmail, arg) ) {
+			message = "+OK message deleted!\n";
+		} else {
+			message = "-ERR no such message or message already deleted!\n";
+		}
+
+		// sending response
+		if (!send_data_server(sock, message.c_str()) ) return false; 					
+		return true;
+
+	}
+	else if (command == "RSET") {	// RESTART COMMAND
+
+		string message;
+
+		if (mDB.unmark_message_deleted(db_name.c_str(), gmail) ) {
+			message = "+OK\n";
+		} else {
+			message = "-ERR probleem with database, please try again!\n";
+		}
+
+		// sending response
+		if (!send_data_server(sock, message.c_str()) ) return false; 					
+		return true;
+
+	}
+	else if(command == "NOOP") {	// NOOP command
+		string message = "+OK";
+		if (send_data_server(sock, message.c_str())) return  true;
+		
+		return false;
+	}
+	else if(command == "QUIT") {	// QUIT command
+		string message = "+OK POP3 server signing off\n";
+
+		mDB.delete_marked_message(db_name.c_str(), gmail);
+
+		if (send_data_server(sock, message.c_str())) return  true;
+		
+		return false;
 	}
 
 	 return true;

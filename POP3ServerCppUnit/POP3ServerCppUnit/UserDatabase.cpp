@@ -68,11 +68,7 @@ bool UserDatabase::find_user(char* login_data, const char* data_base) {
 		__logged_in = element.logged_in;
         __banned = element.banned;
 
-    } else if (exit == SQLITE_OK && element.gmail == ""){ 
-        cout << "Can't find user " << login_data <<  " in database " << data_base << endl;
-    } else {
-        cout << "Can't find user " << login_data <<  " in database " << data_base << endl;
-    }
+	}
 
     sqlite3_close(db);
     return rv;

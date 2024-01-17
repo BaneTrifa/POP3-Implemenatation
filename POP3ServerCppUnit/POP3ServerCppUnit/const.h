@@ -61,7 +61,7 @@ const uint16 MSG_QUIT					= 0x0018;
 #define ADRESS "127.0.0.1"
 //#define ADRESS "mail.spymac.com"
 //#define ADRESS "krtlab8"
-#define PORT 27000
+#define PORT 110
 
 #define TIMER1_ID 0
 #define TIMER1_COUNT 10
