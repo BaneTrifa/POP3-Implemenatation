@@ -1,1 +1,0 @@
-1. Install mingw for make file: https://medium.com/@samsorrahman/how-to-run-a-makefile-in-windows-b4d115d7c516

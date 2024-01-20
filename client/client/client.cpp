@@ -117,7 +117,7 @@ int __cdecl main(int argc, char** argv)
             int option = user_menu(uinput);
             send_data(uinput, ConnectSocket);
 
-
+            // Other command
             if (!receive_data(ConnectSocket, response)) return 1;
 
             printf("%s\n", response);
@@ -125,7 +125,7 @@ int __cdecl main(int argc, char** argv)
             system("pause");
             system("cls");
 
-            if (option == 7) {
+            if (option == 8) { // QUIT option
                 break;
             }
 

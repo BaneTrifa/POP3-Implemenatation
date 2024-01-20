@@ -2,30 +2,41 @@
 
 
 void login_menu(char* uinput){
+    std::string message_arg;
+
     std::cout << "Enter your gmail: \t";
-    std::cin >> uinput;
+    std::cin >> message_arg;
+
+    strcpy(uinput, "USER ");
+    strcat(uinput, message_arg.c_str());
 }
 
 void pin_menu(char* uinput){
-        std::cout << "Enter your password: \t";
-        std::cin >> uinput;
+    std::string message_arg;
+
+    std::cout << "Enter your password: \t";
+    std::cin >> message_arg;
+
+    strcpy(uinput, "PASS ");
+    strcat(uinput, message_arg.c_str());
 }
 
 int user_menu(char* uinput) {
     int option;
 
     std::cout << "\n1. STAT \n";
-    std::cout << "2. LIST \n";
-    std::cout << "3. RETR\n";
-    std::cout << "4. DELE\n";
-    std::cout << "5. NOOP\n";
-    std::cout << "6. RSET\n";
-    std::cout << "7. QUIT\n";
+    std::cout << "2. LIST (with argument)\n";
+    std::cout << "3. LIST\n";
+    std::cout << "4. RETR\n";
+    std::cout << "5. DELE\n";
+    std::cout << "6. NOOP\n";
+    std::cout << "7. RSET\n";
+    std::cout << "8. QUIT\n";
 
     do {
         std::cout << "Enter option: \t";
         std::cin >> option;
-    } while (option > 7 || option < 1);
+    } while (option >8 || option < 1);
 
     std::string message_arg;
     switch (option) {
@@ -40,26 +51,29 @@ int user_menu(char* uinput) {
             strcat(uinput, message_arg.c_str());
             break;
         case 3:
+            strcpy(uinput, "LIST");
+            break;
+        case 4:
             std::cout << "Command: RETR ";
             std::cin >> message_arg;
 
             strcpy(uinput, "RETR ");
             strcat(uinput, message_arg.c_str());
             break;
-        case 4:
+        case 5:
             std::cout << "Command: DELE ";
             std::cin >> message_arg;
 
             strcpy(uinput, "DELE ");
             strcat(uinput, message_arg.c_str());;
             break;
-        case 5:
+        case 6:
             strcpy(uinput, "NOOP");
             break;
-        case 6:
+        case 7:
             strcpy(uinput, "RSET");
             break;
-        case 7:
+        case 8:
             strcpy(uinput, "QUIT");
             break;
         default:
